@@ -101,6 +101,9 @@ async fn main() {
                               &mut colliders,
                               &mut joint_constraints,);
     loop {
+        let delta = get_frame_time();
+        println!("{}", delta);
+        mechanical_world.set_timestep(delta);
         mechanical_world.step(
             &mut geometrical_world,
             &mut bodies,
@@ -140,20 +143,20 @@ async fn main() {
         );
         if is_key_down(KeyCode::Right) {
             let force = Force::linear(na::Vector2::new(250., 0.));
-            hero.rigid_body_mut(&mut bodies).apply_force(0, &force, ForceType::AccelerationChange, false);
+            hero.rigid_body_mut(&mut bodies).apply_force(0, &force, ForceType::Impulse, true);
             current_animation = 1;
             flip = false;
         } else if is_key_down(KeyCode::Left) {
             let force = Force::linear(na::Vector2::new(-250., 0.));
-            hero.rigid_body_mut(&mut bodies).apply_force(0, &force, ForceType::AccelerationChange, false);
+            hero.rigid_body_mut(&mut bodies).apply_force(0, &force, ForceType::Impulse, true);
             flip = true;
             current_animation = 1;
         } else {
             current_animation = 0;
         }
         if is_key_down(KeyCode::Space) {
-            let force = Force::linear(na::Vector2::new(0., -250.));
-            hero.rigid_body_mut(&mut bodies).apply_force(0, &force, ForceType::AccelerationChange, false);
+            let force = Force::linear(na::Vector2::new(0., -200.));
+            hero.rigid_body_mut(&mut bodies).apply_force(0, &force, ForceType::Impulse, true);
         }
 
         if is_key_down(KeyCode::Z) {
